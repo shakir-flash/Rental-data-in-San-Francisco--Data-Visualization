@@ -4,7 +4,7 @@ jobs:
   check-allowed-files:
     runs-on: self-hosted
     container:
-      image: ghcr.io/info526-dataviz/my_r_gh_actions:latest
+      image: ghcr.io/gchism94/r_gh_actions:latest
     steps:
     - name: Checkout
       uses: actions/checkout@master
@@ -20,7 +20,7 @@ jobs:
       GITHUB_PAT: ${{ secrets.GH_PAT }}
     runs-on: self-hosted
     container:
-      image: ghcr.io/info526-dataviz/my_r_gh_actions:latest
+      image: ghcr.io/gchism94/r_gh_actions:latest
     steps:
     - name: Checkout
       uses: actions/checkout@master
