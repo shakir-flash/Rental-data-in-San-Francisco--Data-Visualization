@@ -1,6 +1,6 @@
 ---
 title: "HW 01"
-author: "INSERT YOUR NAME HERE"
+author: "Shakir Ahmed"
 format: html
 toc: true
 ---
@@ -21,6 +21,11 @@ toc: true
 
 
 ## 4 - Rental apartments in SF
+```{r label-me-4}
+hi
+
+
+```
 
 
 ## 5 - Napoleon’s march.
