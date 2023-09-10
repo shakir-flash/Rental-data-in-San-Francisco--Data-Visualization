@@ -73,23 +73,72 @@ In continuation, the mutated data is now filtered down for the following paramet
 
 1.  City= San Francsisco (Excluded South San Francisco, as question clearly mentioned only San Francisco)
 2.  Full unit is available (i.e. room_in_apt==0)
-3.  One neighbourhood- Bayview
+3.  Six neighbourhoods- Bayview, Parkside, CCSF, Russian Hill, Tenderloin and Twin peaks
 4.  Year - From 2010 - 2018
 
 ```{r warning = FALSE, message=FALSE}
 # Filter the data for Bayview neighborhood and years 2010-2018
 filtered_data_bayview <- mutate_data |>
   filter(city == "san francisco", room_in_apt == 0, nhood == "bayview", year >= 2010, year <= 2018)
+
+# Filter the data for Parkside neighborhood and years 2010-2018
+filtered_data_parkside <- mutate_data |>
+  filter(city == "san francisco", room_in_apt == 0, nhood == "parkside", year >= 2010, year <= 2018)
+
+# Filter the data for CCSF neighborhood and years 2010-2018
+filtered_data_ccsf <- mutate_data |>
+  filter(city == "san francisco", room_in_apt == 0, nhood == "CCSF", year >= 2010, year <= 2018)
+
+# Filter the data for Russian Hill neighborhood and years 2010-2018
+filtered_data_russianhill <- mutate_data |>
+  filter(city == "san francisco", room_in_apt == 0, nhood == "russian hill", year >= 2010, year <= 2018)
+
+# Filter the data for Tenderloin neighborhood and years 2010-2018
+filtered_data_tenderloin <- mutate_data |>
+  filter(city == "san francisco", room_in_apt == 0, nhood == "tenderloin", year >= 2010, year <= 2018)
+
+# Filter the data for Twin Peaks neighborhood and years 2010-2018
+filtered_data_twinpeaks <- mutate_data |>
+  filter(city == "san francisco", room_in_apt == 0, nhood == "twin peaks", year >= 2010, year <= 2018)
+
 ```
 
-For ease of viewing the trends, i have calculated the median price for the area using the following:
+For ease of viewing the trends, i have calculated the median price for each of the area using the following:
 
 ```{r warning = FALSE, message=FALSE}
 # Group data by year and calculate the median price per bedroom for each year (To highlight median price as a second layer)
-summary_stats <- filtered_data_bayview |>
-  group_by(year) |>    #Grouping by year
-  summarize(median_price_bayview = median(price_per_bedroom, na.rm = TRUE))  
 
+summary_stats_bayview <- filtered_data_bayview |>
+  group_by(year) |>    #Grouping by year
+  summarize(median_price_bayview = median(price_per_bedroom, na.rm = TRUE))
+
+summary_stats_parkside <- filtered_data_parkside |>
+  group_by(year) |>    #Grouping by year
+  summarize(median_price_parkside = median(price_per_bedroom, na.rm = TRUE))
+
+summary_stats_ccsf <- filtered_data_ccsf |>
+  group_by(year) |>    #Grouping by year
+  summarize(median_price_ccsf = median(price_per_bedroom, na.rm = TRUE))
+
+summary_stats_russianhill <- filtered_data_russianhill |>
+  group_by(year) |>    #Grouping by year
+  summarize(median_price_russianhill = median(price_per_bedroom, na.rm = TRUE))
+
+summary_stats_tenderloin <- filtered_data_tenderloin |>
+  group_by(year) |>    #Grouping by year
+  summarize(median_price_tenderloin = median(price_per_bedroom, na.rm = TRUE))
+
+summary_stats_twinpeaks <- filtered_data_twinpeaks |>
+  group_by(year) |>    #Grouping by year
+  summarize(median_price_twinpeaks = median(price_per_bedroom, na.rm = TRUE))
+
+```
+
+Scatter plot (Jitter) of each of the neighborhood highlighting the trends in rent per bedroom:
+
+1.  Bayview neighbourhood:
+
+```{r warning = FALSE, message=FALSE}
 # Creating a scatterplot with datapoints and median to highlight median prices per year
 ggplot() +
   #Scatter plot to plot the filtered data
@@ -97,13 +146,13 @@ ggplot() +
              aes(x = year, y = price_per_bedroom, color = "Price per Bedroom"), 
              size = 1) +    
   #Scatter plot to show the median cost per bedroom
-  geom_point(data = summary_stats, 
+  geom_point(data = summary_stats_bayview, 
              aes(x = year, y = median_price_bayview, color = "Median Price"), 
              size = 2) +
   #Line plot to show the trends of median
-  geom_line(data = summary_stats, 
+  geom_line(data = summary_stats_bayview, 
             aes(x = year, y = median_price_bayview, color = "Median Price"), 
-            size = 1) +
+            size = 0.5) +
   #Labels, titles and captions
   labs(
     title = "Rental price per bedroom in San Francisco",
@@ -116,6 +165,36 @@ ggplot() +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5), plot.subtitle = element_text(hjust = 0.5)) +
   scale_x_continuous(breaks = unique(filtered_data_bayview$year)) +
+  scale_color_manual(values = c("Price per Bedroom" = "lightblue2", "Median Price" = "orange"))
+```
+
+```{r warning = FALSE, message=FALSE}
+# Creating a scatterplot with datapoints and median to highlight median prices per year
+ggplot() +
+  #Scatter plot to plot the filtered data
+  geom_point(data = filtered_data_parkside, 
+             aes(x = year, y = price_per_bedroom, color = "Price per Bedroom"), 
+             size = 1) +    
+  #Scatter plot to show the median cost per bedroom
+  geom_point(data = summary_stats_parkside, 
+             aes(x = year, y = median_price_parkside, color = "Median Price"), 
+             size = 2) +
+  #Line plot to show the trends of median
+  geom_line(data = summary_stats_parkside, 
+            aes(x = year, y = median_price_parkside, color = "Median Price"), 
+            size = 0.5) +
+  #Labels, titles and captions
+  labs(
+    title = "Rental price per bedroom in San Francisco",
+    subtitle = "Parkside Neighbourhood",
+    x = "Year",
+    y = "Price per Bedroom\n(In USD)",
+    caption = "Source: Jon Harmon (2022) | TidyTuesday"
+  ) +
+  #Setting up of theme, centering of Titles and subtitle, and inserting of legends
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5), plot.subtitle = element_text(hjust = 0.5)) +
+  scale_x_continuous(breaks = unique(filtered_data_parkside$year)) +
   scale_color_manual(values = c("Price per Bedroom" = "lightblue2", "Median Price" = "orange"))
 ```
 
