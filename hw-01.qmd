@@ -5,6 +5,34 @@ format: html
 toc: true
 ---
 
+## 0- Setup
+
+```{r include=FALSE}
+#Installing required packages for the homework
+install.packages("pacman")
+install.packages("tidyverse")
+install.packages("dplyr")
+install.packages("ggplot2")
+pacman::p_load("tidyverse")
+
+
+# set theme for ggplot2
+ggplot2::theme_set(ggplot2::theme_minimal(base_size = 14))
+
+# set width of code output
+options(width = 65)
+
+# set figure parameters for knitr
+knitr::opts_chunk$set(
+  fig.width = 7,        # 7" width
+  fig.asp = 0.618,      # the golden ratio
+  fig.retina = 3,       # dpi multiplier for displaying HTML output on retina
+  fig.align = "center", # center align figures
+  dpi = 300             # higher dpi, sharper image
+)
+
+```
+
 ## 1 - Road traffic accidents in Edinburgh
 
 ```{r label-me-1}
@@ -19,13 +47,76 @@ toc: true
 
 ## 3 - US counties
 
-
 ## 4 - Rental apartments in SF
-```{r label-me-4}
-hi
 
+Data is extracted and provided from the TidyTuesday repository. The raw \*.csv file is extracted and loaded from github to this R document for this homework.
 
+```{r warning = FALSE, message=FALSE}
+
+# Read the data from the URL in Github
+rent <- read.csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-07-05/rent.csv")
 ```
 
+Question 1:
 
-## 5 - Napoleon’s march.
+1.  To create a visualization that will help compare the distribution of rental prices (`price`) per bedroom (`beds`) across neighborhoods (`nhood`) in the city of San Francisco (`city == "san francisco"`), over time. Limit your analysis to rentals where the full unit is available, i.e. (`room_in_apt	== 0`). You have the flexibility to choose which years and which neighborhoods.
+
+Following code snippet is to mutate the data, and create a new column, to calculate the price per bedroom for the whole 'rent' data set. (new table name- 'mutate_data')
+
+```{r warning = FALSE, message=FALSE}
+# Create a new column for price per bedroom (Using mutate function)
+mutate_data <- rent %>%
+  mutate(price_per_bedroom = price / beds)  #Assigning value of new column to a division of price/beds
+```
+
+In continuation, the mutated data is now filtered down for the following parameters:
+
+1.  City= San Francsisco (Excluded South San Francisco, as question clearly mentioned only San Francisco)
+2.  Full unit is available (i.e. room_in_apt==0)
+3.  One neighbourhood- Bayview
+4.  Year - From 2010 - 2018
+
+```{r warning = FALSE, message=FALSE}
+# Filter the data for Bayview neighborhood and years 2010-2018
+filtered_data_bayview <- mutate_data |>
+  filter(city == "san francisco", room_in_apt == 0, nhood == "bayview", year >= 2010, year <= 2018)
+```
+
+For ease of viewing the trends, i have calculated the median price for the area using the following:
+
+```{r warning = FALSE, message=FALSE}
+# Group data by year and calculate the median price per bedroom for each year (To highlight median price as a second layer)
+summary_stats <- filtered_data_bayview |>
+  group_by(year) |>    #Grouping by year
+  summarize(median_price_bayview = median(price_per_bedroom, na.rm = TRUE))  
+
+# Creating a scatterplot with datapoints and median to highlight median prices per year
+ggplot() +
+  #Scatter plot to plot the filtered data
+  geom_point(data = filtered_data_bayview, 
+             aes(x = year, y = price_per_bedroom, color = "Price per Bedroom"), 
+             size = 1) +    
+  #Scatter plot to show the median cost per bedroom
+  geom_point(data = summary_stats, 
+             aes(x = year, y = median_price_bayview, color = "Median Price"), 
+             size = 2) +
+  #Line plot to show the trends of median
+  geom_line(data = summary_stats, 
+            aes(x = year, y = median_price_bayview, color = "Median Price"), 
+            size = 1) +
+  #Labels, titles and captions
+  labs(
+    title = "Rental price per bedroom in San Francisco",
+    subtitle = "Bayview Neighbourhood",
+    x = "Year",
+    y = "Price per Bedroom\n(In USD)",
+    caption = "Source: Jon Harmon (2022) | TidyTuesday"
+  ) +
+  #Setting up of theme, centering of Titles and subtitle, and inserting of legends
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5), plot.subtitle = element_text(hjust = 0.5)) +
+  scale_x_continuous(breaks = unique(filtered_data_bayview$year)) +
+  scale_color_manual(values = c("Price per Bedroom" = "lightblue2", "Median Price" = "orange"))
+```
+
+## 5 - Napoleon's march.
