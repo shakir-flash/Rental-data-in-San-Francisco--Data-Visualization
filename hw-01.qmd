@@ -2,10 +2,15 @@
 title: "HW 01"
 author: "Shakir Ahmed"
 format: html
+date: 2023-09-08 (YYYY-MM-DD)
 toc: true
 ---
 
 ## 0- Setup
+
+Initialization of packages, and downloading additional packages needed for this homework assignment.
+
+Theme set has also been set to the perfect standard (as discussed in lectures).
 
 ```{r include=FALSE}
 #Installing required packages for the homework
@@ -49,7 +54,9 @@ knitr::opts_chunk$set(
 
 ## 4 - Rental apartments in SF
 
-Data is extracted and provided from the TidyTuesday repository. The raw \*.csv file is extracted and loaded from github to this R document for this homework.
+**Introduction:**
+
+This code snippet retrieves rental data from a GitHub repository using R's "**read.csv()**" function. The dataset, part of the TidyTuesday project, will be the foundation for data analysis and visualization task, enabling insights into rental prices and patterns for the city of San Francisco.
 
 ```{r warning = FALSE, message=FALSE}
 
@@ -57,11 +64,11 @@ Data is extracted and provided from the TidyTuesday repository. The raw \*.csv f
 rent <- read.csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-07-05/rent.csv")
 ```
 
-Question 1:
+**Question 1:**
 
 1.  To create a visualization that will help compare the distribution of rental prices (`price`) per bedroom (`beds`) across neighborhoods (`nhood`) in the city of San Francisco (`city == "san francisco"`), over time. Limit your analysis to rentals where the full unit is available, i.e. (`room_in_apt   == 0`). You have the flexibility to choose which years and which neighborhoods.
 
-Following code snippet is to mutate the data, and create a new column, to calculate the price per bedroom for the whole 'rent' data set. (new table name- 'mutate_data')
+This code snippet extends the rental dataset by creating a new column- '**price_per_bedroom**', calculated as the ratio of '**price**' to the number of bedrooms- '**beds**'. (new table name- '**mutate_data**'
 
 ```{r warning = FALSE, message=FALSE}
 # Create a new column for price per bedroom (Using mutate function)
@@ -71,10 +78,10 @@ mutate_data <- rent %>%
 
 In continuation, the mutated data is now filtered down for the following parameters:
 
-1.  City= San Francsisco (Excluded South San Francisco, as question clearly mentioned only San Francisco)
-2.  Full unit is available (i.e. room_in_apt==0)
-3.  Six neighbourhoods- Bayview, Parkside, CCSF, Russian Hill, Sea Cliff and Twin peaks
-4.  Year - From 2010 - 2018
+1.  City= **San Francsisco** (Excluded South San Francisco, as question clearly mentioned only San Francisco)
+2.  Full unit is available (i.e. **room_in_apt==0**)
+3.  Six neighbourhoods- **Bayview, Parkside, CCSF, Russian Hill, Sea Cliff** and **Twin peaks**
+4.  Year - From **2010-2018** (for first four neighborhoods), and **2011-2017** for last two.
 
 ```{r warning = FALSE, message=FALSE}
 # Filter the data for Bayview neighborhood and years 2010-2018
@@ -103,7 +110,7 @@ filtered_data_twinpeaks <- mutate_data |>
 
 ```
 
-For ease of viewing the trends, i have calculated the median price for each of the area using the following:
+For ease of viewing the trends, i have calculated the median price for each of the area using the **summarize()** function. This provides an additional layer for vieweing and analyzing the median trends for neighborhoods across time. The '**na.rm=TRUE**' parameter is to deal with missing values in the '**price_per_bedroom**', as all the 'price' are there in the filtered data, but some values are **'0' or 'NA'** in the 'beds' column, hence leading to a null value in the '**price_per_beds**' column.
 
 ```{r warning = FALSE, message=FALSE}
 # Group data by year and calculate the median price per bedroom for each year (To highlight median price as a second layer)
@@ -134,9 +141,15 @@ summary_stats_twinpeaks <- filtered_data_twinpeaks |>
 
 ```
 
-Scatter plot (Jitter) of each of the neighborhood highlighting the trends in rent per bedroom:
+**Plotting of the graphs:**
 
-1.  Bayview neighborhood:
+This code generates a scatterplot in R using ggplot2 to visualize rental price trends in San Francisco's city. It plots data points for rental prices per bedroom and overlays median values (as a dot plot and a line plot) over the years.
+
+I have chosen this format since it is a good way of representation of the change in rent per year, and for each year there are multiple observations, and the median price can be clearly plotted to show the fluctuating trends.
+
+The plot is also customized with titles, captions, and legends, providing a clear representation of rental price variations over time.
+
+1.  **Bayview neighborhood:**
 
 ```{r warning = FALSE, message=FALSE}
 # Creating a scatterplot with datapoints and median to highlight median prices per year
@@ -169,12 +182,14 @@ ggplot() +
   scale_color_manual(values = c("Price per Bedroom" = "lightblue2", "Median Price" = "orange"))
 ```
 
-2.  Parkside neighborhood:
+**Observations:** Overall trend for the median price per bedroom in the Bayview neighborhood is steadily increasing (positive trend). There are minor adjustments/corrections in the median price during the years - 2014, 2016 and 2018. The peak median price is during the year 2015.
+
+2.  **Parkside neighborhood:**
 
 ```{r warning = FALSE, message=FALSE}
 # Creating a scatterplot with datapoints and median to highlight median prices per year
 ggplot() +
-  #Scatter plot to plot the filtered data for Park View
+  #Scatter plot to plot the filtered data for Park Side
   geom_point(data = filtered_data_parkside, 
              aes(x = year, y = price_per_bedroom, color = "Price per Bedroom"), 
              size = 1) +    
@@ -203,7 +218,9 @@ ggplot() +
 
 ```
 
-3.  Comparison of CCSF vs Russian Hills neighborhood
+**Observations:** Overall trend for the median price per bedroom in the Parkside neighborhood is steadily increasing (positive trend). There is only one year - 2016, where median price has gone down from the preceding year. The peak median price is during the year 2018.
+
+3.  **Comparison of CCSF vs Russian Hills neighborhood**
 
     ```{r warning = FALSE, message=FALSE}
     # Creating a scatterplot with datapoints and median to highlight median prices per year
@@ -250,7 +267,7 @@ ggplot() +
       # Setting up of theme, centering of Titles and subtitle, and inserting of legends
       theme_minimal() +
       theme(plot.title = element_text(hjust = 0.5), plot.subtitle = element_text(hjust = 0.5)) +
-      scale_x_continuous(breaks = unique(filtered_data_ccsf$year)) +
+      scale_x_continuous(breaks = unique(filtered_data_russianhill$year)) +
       scale_color_manual(
         values = c(
           "CCSF: Price per Bedroom" = "red2",
@@ -268,7 +285,13 @@ ggplot() +
 
     ```
 
-4.  Comparison of Sea Cliff vs Twin Peaks neighborhood
+    **Observations:**
+
+    a\) Overall trend for the median price per bedroom in the CCSF neighborhood is steadily increasing (positive trend), except for the year 2017, where there was a sharp increase in median price per bedroom, followed by a correction back to previous year level in 2018. The peak median price is during the year 2017.
+
+    b\) Overall trend for the median price per bedroom in the Russian Hill neighborhood is slightly increasing from 2010-2018, but overall stagnant.The peak median price appears to be during the year 2010 (but should be ignored as sufficient data is not available for comparison). The true peak median price is during the year 2015.
+
+4.   **Comparison of Sea Cliff vs Twin Peaks neighborhood**
 
 ```{r warning = FALSE, message=FALSE}
 
@@ -334,5 +357,7 @@ ggplot() +
   )
 
 ```
+
+**Observations**: The overall trend for both the neighborhoods- Twin peaks and Sea Cliff are trending upwards. Both median price start off at around the same price (in 2011), and are comparably the same (Twin peak slightly more than Sea Cliff) towards the year 2017. The rise in prices of Twin peaks is significantly more in the middle, with Twin peak neighborhood's price peaking during the year 2015, whereas the rise of price in Sea Cliff is more gradual, and peaks during the year 2017.
 
 ## 5 - Napoleon's march.
