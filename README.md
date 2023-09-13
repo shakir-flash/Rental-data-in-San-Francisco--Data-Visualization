@@ -1,11 +1,7 @@
 # Project- Data Visualization
 
-This prooject is about uing R to vislualize and plot the rental data in the city of San Francisco. 
-    ``` r
-    ggplot(county) +
-      geom_point(aes(x = median_edu, y = median_hh_income)) +
-      geom_boxplot(aes(x = smoking_ban, y = pop2017))
-    ```
+This project is about uing R to vislualize and plot the rental data in the city of San Francisco. 
+
 ##Problem statement
     **Rental apartments in SF.** The data for this exercise comes from 
     TidyTuesday and it's on rental prices in San Francisco. You can find 
@@ -16,6 +12,14 @@ This prooject is about uing R to vislualize and plot the rental data in the city
     (`nhood`) in the city of San Francisco (`city == "san francisco"`), 
     over time. Limit of analysis to rentals where the full unit is available,
     i.e. (`room_in_apt	== 0`). 
+
+     ``` {r}
+install.packages("pacman")
+install.packages("tidyverse")
+install.packages("dplyr")
+install.packages("ggplot2")
+pacman::p_load("tidyverse")
+    ```
     
 
 5.  **Napoleon’s march.** The instructions for this exercise are simple:
