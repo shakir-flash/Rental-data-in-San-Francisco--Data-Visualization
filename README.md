@@ -24,5 +24,27 @@ Library function used, and installation of packages:
      ```
 Plots generated from the code:
 
-****1. Bayview neighborhood:**
+**1. Bayview neighborhood:**
+
+![bayview](https://github.com/shakir-flash/Rental-data-in-San-Francisco-Data-Visualization/assets/59859522/237564e0-823e-4932-bda0-116d163619fd)
+
+
+**2. Parkside neighborhood:**
+
+![parkside](https://github.com/shakir-flash/Rental-data-in-San-Francisco-Data-Visualization/assets/59859522/a4861e66-7ccc-4c2a-8112-e7b351efe634)
+
+
+**3. CCSF vs Russian Hill neighborhood:**
+
+![ccsf_vs_russianhill](https://github.com/shakir-flash/Rental-data-in-San-Francisco-Data-Visualization/assets/59859522/55c807d6-454e-48d2-ab06-5527618ad46d)
+
+
+**4. Sea Cliff vs Twin Peaks neighborhood:**
+
+![seacliff_vs_twinpeaks](https://github.com/shakir-flash/Rental-data-in-San-Francisco-Data-Visualization/assets/59859522/249a2b0b-5503-4bb4-8feb-09adeb41af35)
+
+There are three layers in the plot for the above:
+1. Dotplot of all the data points in the csv file.
+2. Dotplot of the median points calculated in the R code.
+3. Lineplot of the median points to show the fluctuating trends in price per bedroom.
 
