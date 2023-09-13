@@ -11,15 +11,18 @@ This project is to create a visualization that will help compare the distributio
 of rental prices (`price`) per bedroom (`beds`) across neighborhoods 
 (`nhood`) in the city of San Francisco (`city == "san francisco"`), 
 over time. Limit of analysis to rentals where the full unit is available,
-i.e. (`room_in_apt	== 0`). 
+i.e. (`room_in_apt	== 0`). Year of filter is from 2010-2018
 
 Library function used, and installation of packages:
 
      ``` {r}
-install.packages("pacman")
-install.packages("tidyverse")
-install.packages("dplyr")
-install.packages("ggplot2")
-pacman::p_load("tidyverse")
-```
-    
+     install.packages("pacman")
+     install.packages("tidyverse")
+     install.packages("dplyr")
+     install.packages("ggplot2")
+     pacman::p_load("tidyverse")
+     ```
+Plots generated from the code:
+
+****1. Bayview neighborhood:**
+
