@@ -1,6 +1,6 @@
 # Project- Data Visualization
-
 This project is about uing R to visualize and plot the rental data in the city of San Francisco. 
+
 
 ##Problem statement
 Rental apartments in SF. The data for this exercise comes from 
